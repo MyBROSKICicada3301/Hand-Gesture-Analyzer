@@ -35,7 +35,7 @@ class MonsterAnalyzer:
     def __init__(self):
         """Initialize the Monster Analyzer"""
         print("=" * 60)
-        print("🔥 Monster Analyzer - Real-time Flavor Detection")
+        print("Monster Analyzer - Real-time Flavor Detection")
         print("=" * 60)
         
         # Initialize models
@@ -49,7 +49,7 @@ class MonsterAnalyzer:
         if os.path.exists(config.OBJECT_DETECTION_MODEL_PATH):
             self.object_detector = ObjectDetector(config.OBJECT_DETECTION_MODEL_PATH)
         else:
-            print("⚠ Object detection model not found. Using fallback detection.")
+            print("Object detection model not found. Using fallback detection.")
             print(f"  Expected path: {config.OBJECT_DETECTION_MODEL_PATH}")
         
         # Flavor classifier
@@ -60,7 +60,7 @@ class MonsterAnalyzer:
                 config.MONSTER_FLAVORS
             )
         else:
-            print("⚠ Flavor classifier not found. Detection will be limited.")
+            print("Flavor classifier not found. Detection will be limited.")
             print(f"  Expected path: {config.FLAVOR_CLASSIFIER_PATH}")
         
         # Initialize webcam
@@ -72,7 +72,7 @@ class MonsterAnalyzer:
         if not self.cap.isOpened():
             raise RuntimeError("Failed to open webcam!")
         
-        print(f"✓ Webcam initialized: {config.FRAME_WIDTH}x{config.FRAME_HEIGHT}")
+        print(f"Webcam initialized: {config.FRAME_WIDTH}x{config.FRAME_HEIGHT}")
         
         # Initialize TTS if enabled
         self.tts_engine = None
@@ -80,9 +80,9 @@ class MonsterAnalyzer:
             try:
                 self.tts_engine = pyttsx3.init()
                 self.tts_engine.setProperty('rate', 150)
-                print("✓ Text-to-speech enabled")
+                print("Text-to-speech enabled")
             except:
-                print("⚠ Text-to-speech initialization failed")
+                print("Text-to-speech initialization failed")
         
         # State tracking
         self.last_announced_flavor = None
@@ -92,7 +92,7 @@ class MonsterAnalyzer:
         if config.ENABLE_LOGGING:
             self._initialize_logging()
         
-        print("\n✓ Monster Analyzer ready!")
+        print("\nMonster Analyzer ready!")
         print("\nControls:")
         print("  - Press 'q' to quit")
         print("  - Press 's' to save current frame")
@@ -287,10 +287,9 @@ class MonsterAnalyzer:
         
         # Display flavor prediction
         if flavor_detected:
-            emoji = config.FLAVOR_EMOJIS.get(flavor_detected, "")
             draw_flavor_prediction(
                 display_frame, flavor_detected, max_confidence,
-                emoji, (20, 50), 1.0, config.COLOR_TEXT
+                "", (20, 50), 1.0, config.COLOR_TEXT
             )
             
             if config.SHOW_CONFIDENCE_BAR:
@@ -392,7 +391,7 @@ class MonsterAnalyzer:
         if self.tts_engine:
             self.tts_engine.stop()
         
-        print("✓ Cleanup complete")
+        print("Cleanup complete")
 
 
 def main():
@@ -403,7 +402,7 @@ def main():
     except KeyboardInterrupt:
         print("\n\nInterrupted by user")
     except Exception as e:
-        print(f"\n✗ Error: {e}")
+        print(f"\nError: {e}")
         import traceback
         traceback.print_exc()
 

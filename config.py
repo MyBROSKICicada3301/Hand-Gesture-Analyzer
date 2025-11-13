@@ -27,39 +27,16 @@ HAND_CAN_PROXIMITY_THRESHOLD = 100  # pixels
 
 # Monster Energy flavors (update this list with actual flavors you want to detect)
 MONSTER_FLAVORS = [
-    "Monster Energy Original",
-    "Monster Ultra White",
-    "Monster Ultra Blue",
-    "Monster Ultra Red",
-    "Monster Ultra Paradise",
-    "Monster Ultra Rosa",
-    "Monster Ultra Gold",
-    "Monster Ultra Violet",
-    "Monster Ultra Sunrise",
-    "Monster Ultra Watermelon",
-    "Monster Mango Loco",
-    "Monster Pacific Punch",
-    "Monster Pipeline Punch",
-    "Monster Juice Monster Pacific Punch",
-    "Unknown Monster Flavor"
+    "Monster Ultra Peachy Keen",
+    "Monster Bad Apple",
+    "Monster Full Throttle"
 ]
 
 # Flavor emoji mapping (optional for fun display)
 FLAVOR_EMOJIS = {
-    "Monster Energy Original": "⚡",
-    "Monster Ultra White": "❄️",
-    "Monster Ultra Blue": "💙",
-    "Monster Ultra Red": "❤️",
-    "Monster Ultra Paradise": "🍃",
-    "Monster Ultra Rosa": "🌸",
-    "Monster Ultra Gold": "🏆",
-    "Monster Ultra Violet": "💜",
-    "Monster Ultra Sunrise": "🌅",
-    "Monster Ultra Watermelon": "🍉",
-    "Monster Mango Loco": "🥭",
-    "Monster Pacific Punch": "🌊",
-    "Monster Pipeline Punch": "🌺",
-    "Unknown Monster Flavor": "❓"
+    "Monster Ultra Peachy Keen": "",
+    "Monster Bad Apple": "",
+    "Monster Full Throttle": ""
 }
 
 # Visualization settings

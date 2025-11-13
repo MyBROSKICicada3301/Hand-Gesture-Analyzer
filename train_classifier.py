@@ -1,6 +1,6 @@
 """
 Training Script for Monster Flavor Classifier
-This script helps you train a TensorFlow Lite model to classify Monster Energy flavors
+This script helps you train a TensorFlow Lite model to classify the Monster Energy flavors
 """
 import tensorflow as tf
 from tensorflow import keras
@@ -119,7 +119,7 @@ def convert_to_tflite(model: keras.Model, output_path: str, quantize: bool = Tru
     with open(output_path, 'wb') as f:
         f.write(tflite_model)
     
-    print(f"✓ TFLite model saved: {output_path}")
+    print(f"TFLite model saved: {output_path}")
     print(f"  Model size: {os.path.getsize(output_path) / 1024:.2f} KB")
 
 
@@ -133,12 +133,12 @@ def train_flavor_classifier(data_dir: str, epochs: int = 20, batch_size: int = 3
         batch_size: Batch size for training
     """
     print("=" * 60)
-    print("🔥 Monster Flavor Classifier Training")
+    print("Monster Flavor Classifier Training")
     print("=" * 60)
     
     # Check if data directory exists
     if not os.path.exists(data_dir):
-        print(f"✗ Data directory not found: {data_dir}")
+        print(f"Data directory not found: {data_dir}")
         print("\nPlease organize your training data as follows:")
         print("  data/training/")
         print("    ├── Monster_Energy_Original/")
@@ -152,16 +152,16 @@ def train_flavor_classifier(data_dir: str, epochs: int = 20, batch_size: int = 3
         return
     
     # Prepare datasets
-    print("\n📁 Loading training data...")
+    print("\nLoading training data...")
     train_ds, val_ds, class_names = prepare_dataset(data_dir, batch_size=batch_size)
     
     num_classes = len(class_names)
-    print(f"✓ Found {num_classes} classes: {class_names}")
+    print(f"Found {num_classes} classes: {class_names}")
     print(f"  Training samples: {train_ds.samples}")
     print(f"  Validation samples: {val_ds.samples}")
     
     # Create model
-    print("\n🏗️  Building model...")
+    print("\nBuilding model...")
     model = create_model(num_classes)
     
     # Compile model
@@ -171,7 +171,7 @@ def train_flavor_classifier(data_dir: str, epochs: int = 20, batch_size: int = 3
         metrics=['accuracy']
     )
     
-    print(f"✓ Model created")
+    print(f"Model created")
     model.summary()
     
     # Callbacks
@@ -195,7 +195,7 @@ def train_flavor_classifier(data_dir: str, epochs: int = 20, batch_size: int = 3
     ]
     
     # Train model
-    print(f"\n🚀 Training for {epochs} epochs...")
+    print(f"\nTraining for {epochs} epochs...")
     history = model.fit(
         train_ds,
         validation_data=val_ds,
@@ -204,7 +204,7 @@ def train_flavor_classifier(data_dir: str, epochs: int = 20, batch_size: int = 3
     )
     
     # Evaluate
-    print("\n📊 Evaluation Results:")
+    print("\nEvaluation Results:")
     val_loss, val_acc = model.evaluate(val_ds)
     print(f"  Validation Loss: {val_loss:.4f}")
     print(f"  Validation Accuracy: {val_acc:.4f}")
@@ -213,14 +213,14 @@ def train_flavor_classifier(data_dir: str, epochs: int = 20, batch_size: int = 3
     class_names_path = os.path.join(config.MODEL_DIR, 'class_names.json')
     with open(class_names_path, 'w') as f:
         json.dump(class_names, f, indent=2)
-    print(f"✓ Class names saved: {class_names_path}")
+    print(f"Class names saved: {class_names_path}")
     
     # Convert to TFLite
-    print("\n🔧 Converting to TensorFlow Lite...")
+    print("\nConverting to TensorFlow Lite...")
     convert_to_tflite(model, config.FLAVOR_CLASSIFIER_PATH, quantize=True)
     
     # Fine-tuning (optional)
-    print("\n🎯 Fine-tuning model...")
+    print("\nFine-tuning model...")
     base_model = model.layers[0]
     base_model.trainable = True
     
@@ -244,17 +244,17 @@ def train_flavor_classifier(data_dir: str, epochs: int = 20, batch_size: int = 3
     )
     
     # Final evaluation
-    print("\n📊 Final Evaluation:")
+    print("\nFinal Evaluation:")
     val_loss, val_acc = model.evaluate(val_ds)
     print(f"  Validation Loss: {val_loss:.4f}")
     print(f"  Validation Accuracy: {val_acc:.4f}")
     
     # Convert fine-tuned model to TFLite
-    print("\n🔧 Converting fine-tuned model to TensorFlow Lite...")
+    print("\nConverting fine-tuned model to TensorFlow Lite...")
     convert_to_tflite(model, config.FLAVOR_CLASSIFIER_PATH, quantize=True)
     
     print("\n" + "=" * 60)
-    print("✓ Training complete!")
+    print("Training complete!")
     print("=" * 60)
     print(f"\nModel saved to: {config.FLAVOR_CLASSIFIER_PATH}")
     print(f"Class names saved to: {class_names_path}")
@@ -300,9 +300,9 @@ def create_sample_dataset_structure():
         f.write("You can also use:\n")
         f.write("- Google Images (with proper licensing)\n")
         f.write("- Your own webcam to capture training images\n")
-        f.write("- Data augmentation will be applied automatically during training\n")
+            f.write("- Use Data augmentation will be applied automatically during training\n")
     
-    print(f"✓ Sample dataset structure created: {training_dir}")
+    print(f"Sample dataset structure created: {training_dir}")
     print(f"  README: {readme_path}")
 
 

@@ -28,11 +28,11 @@ def collect_training_images(flavor_name: str, num_images: int = 50):
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, config.FRAME_HEIGHT)
     
     if not cap.isOpened():
-        print("✗ Failed to open webcam")
+        print("Failed to open webcam")
         return
     
     print("=" * 60)
-    print(f"📸 Collecting images for: {flavor_name}")
+    print(f"Collecting images for: {flavor_name}")
     print("=" * 60)
     print(f"Target: {num_images} images")
     print(f"Output directory: {flavor_dir}")
@@ -75,7 +75,7 @@ def collect_training_images(flavor_name: str, num_images: int = 50):
             filename = os.path.join(flavor_dir, f"{flavor_name}_{timestamp}.jpg")
             cv2.imwrite(filename, frame)
             image_count += 1
-            print(f"✓ Captured image {image_count}/{num_images}: {filename}")
+            print(f"Captured image {image_count}/{num_images}: {filename}")
             
             # Brief pause to prevent accidental multiple captures
             cv2.waitKey(200)
@@ -89,7 +89,7 @@ def collect_training_images(flavor_name: str, num_images: int = 50):
     cv2.destroyAllWindows()
     
     print("\n" + "=" * 60)
-    print(f"✓ Collection complete: {image_count} images saved")
+    print(f"Collection complete: {image_count} images saved")
     print("=" * 60)
 
 

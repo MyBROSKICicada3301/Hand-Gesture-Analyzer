@@ -21,10 +21,10 @@ def check_python_version():
     print(f"Python version: {version.major}.{version.minor}.{version.micro}")
     
     if version.major < 3 or (version.major == 3 and version.minor < 8):
-        print("✗ Python 3.8 or higher is required")
+        print("Python 3.8 or higher is required")
         return False
     
-    print("✓ Python version is compatible")
+    print("Python version is compatible")
     return True
 
 
@@ -34,10 +34,10 @@ def install_dependencies():
     
     try:
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-        print("✓ Dependencies installed successfully")
+        print("Dependencies installed successfully")
         return True
     except subprocess.CalledProcessError:
-        print("✗ Failed to install dependencies")
+        print("Failed to install dependencies")
         return False
 
 
@@ -55,7 +55,7 @@ def setup_directories():
     
     for directory in directories:
         os.makedirs(directory, exist_ok=True)
-        print(f"✓ Created: {directory}/")
+        print(f"Created: {directory}/")
     
     return True
 
@@ -69,7 +69,7 @@ def check_webcam():
         cap = cv2.VideoCapture(0)
         
         if not cap.isOpened():
-            print("✗ Webcam not accessible")
+            print("Webcam not accessible")
             print("  Please check:")
             print("  - Webcam is connected")
             print("  - No other application is using the webcam")
@@ -80,22 +80,22 @@ def check_webcam():
         cap.release()
         
         if ret:
-            print("✓ Webcam is accessible")
+            print("Webcam is accessible")
             return True
         else:
-            print("✗ Failed to capture frame from webcam")
+            print("Failed to capture frame from webcam")
             return False
     except ImportError:
-        print("⚠ OpenCV not installed yet - will check after installation")
+        print("OpenCV not installed yet - will check after installation")
         return True
     except Exception as e:
-        print(f"⚠ Error checking webcam: {e}")
+        print(f"Error checking webcam: {e}")
         return True
 
 
 def print_next_steps():
     """Print instructions for next steps"""
-    print_header("🎉 Setup Complete!")
+    print_header("Setup Complete!")
     
     print("\nNext Steps:\n")
     
@@ -119,7 +119,7 @@ def print_next_steps():
 
 def main():
     """Main setup function"""
-    print_header("🔥 Monster Analyzer - Quick Start Setup")
+    print_header("Monster Analyzer - Quick Start Setup")
     
     steps = [
         ("Checking Python version", check_python_version),
@@ -130,7 +130,7 @@ def main():
     
     for step_name, step_func in steps:
         if not step_func():
-            print(f"\n✗ Setup failed at: {step_name}")
+            print(f"\nSetup failed at: {step_name}")
             print("Please resolve the issue and run this script again.")
             sys.exit(1)
     

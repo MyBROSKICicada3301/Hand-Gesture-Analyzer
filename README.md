@@ -14,7 +14,6 @@ Monster Analyzer is an interactive AI application that uses your laptop webcam t
 - Detect when you're holding a Monster Energy can using pose estimation
 - Identify the specific flavor in real-time using a custom-trained classifier
 - Display live visual overlays with predictions and confidence scores
-- Optionally announce the flavor using text-to-speech
 
 ### Core Features
 
@@ -28,7 +27,7 @@ Monster Analyzer is an interactive AI application that uses your laptop webcam t
 
 - Pose skeleton visualization
 - Bounding boxes around detected cans
-- Live flavor predictions with emojis
+- Live flavor predictions
 - Confidence bars showing prediction strength
 
 **Custom ML Pipeline**
@@ -52,21 +51,20 @@ Monster-Analyzer/
 ├── train_classifier.py          # Model training script
 ├── collect_training_data.py     # Data collection helper
 ├── setup_models.py              # Model setup utility
+├── quick_start.py               # Quick setup script
 ├── config.py                    # Configuration settings
 ├── requirements.txt             # Python dependencies
 ├── src/
 │   ├── models.py               # Model utilities (pose, detection, classification)
 │   └── visualization.py        # Drawing and overlay functions
-├── models/                      # TFLite models directory
-│   ├── pose_landmark_lite.tflite
-│   ├── detect.tflite           # Object detection model (optional)
+├── models/                      # TensorFlow Lite models directory
 │   └── monster_flavor_classifier.tflite
 ├── data/
 │   └── training/               # Training images organized by flavor
-│       ├── Monster_Energy_Original/
-│       ├── Monster_Ultra_White/
-│       ├── Monster_Ultra_Blue/
-│       └── ...
+│       ├── Monster_Ultra_Peachy_Keen/
+│       ├── Monster_Bad_Apple/
+│       ├── Monster_Full_Throttle/
+│       └── ...  # more flavour images to be added
 └── logs/
     └── detections.csv          # Detection logs
 ```
@@ -77,7 +75,6 @@ Monster-Analyzer/
 
 - Python 3.8 or higher
 - Webcam
-- Windows/Linux/macOS
 
 ### Installation
 
@@ -87,20 +84,21 @@ Monster-Analyzer/
    git clone https://github.com/MyBROSKICicada3301/Monster-Analyzer.git
    cd Monster-Analyzer
    ```
-2. **Install dependencies**
+2. **Create virtual environment(If you have no python local environment))**
+
+   ```powershell
+   python -m venv venv
+   .\venv\Scripts\Activate.ps1
+   ```
+3. **Install dependencies**
 
    ```powershell
    pip install -r requirements.txt
    ```
-3. **Set up models**
-
-   ```powershell
-   python setup_models.py
-   ```
 
 ### Running the Application
 
-**Note:** The application will work with limited functionality without the flavor classifier. You'll need to train your own model for full flavor detection.
+**Note:** You need to train your own model first for flavor detection to work.
 
 ```powershell
 python monster_analyzer.py
@@ -116,23 +114,24 @@ python monster_analyzer.py
 
 ### Step 1: Collect Training Data
 
-Use the data collection script to capture images from your webcam:
+Use the data collection script to capture images from your webcam(This is not perfect, and depends on your system's camera):
 
 ```powershell
-# Collect images for each flavor you want to detect
-python collect_training_data.py "Monster Ultra Blue" --num-images 50
-python collect_training_data.py "Monster Ultra White" --num-images 50
-python collect_training_data.py "Monster Energy Original" --num-images 50
+# Collect 10+ images for each flavor you want to detect
+python collect_training_data.py "Monster_Ultra_Peachy_Keen" --num-images 10
+python collect_training_data.py "Monster_Bad_Apple" --num-images 10
+python collect_training_data.py "Monster_Full_Throttle" --num-images 10
 ```
 
-**Tips for collecting good training data:**
+**How to collect good training data:**
 
 - Take photos from different angles (front, side, angled)
 - Vary the distance from the camera
 - Use different lighting conditions
 - Include partial views of the can
 - Vary backgrounds (but keep the can clearly visible)
-- Collect at least 50-100 images per flavor
+- Collect at least 10-20 images per flavor (more is better)
+  - For now, there are 10 images for each flavour
 
 ### Step 2: Organize Your Data
 
@@ -140,22 +139,35 @@ Your training data should be organized as follows:
 
 ```
 data/training/
-├── Monster_Energy_Original/
-│   ├── image001.jpg
-│   ├── image002.jpg
+├── Monster_Ultra_Peachy_Keen/
+│   ├── 1.jpg
+│   ├── 2.jpg
 │   └── ...
-├── Monster_Ultra_White/
-│   ├── image001.jpg
+├── Monster_Bad_Apple/
+│   ├── 1.jpg
 │   └── ...
-└── Monster_Ultra_Blue/
-    ├── image001.jpg
+└── Monster_Full_Throttle/
+    ├── 1.jpg
     └── ...
 ```
 
-### Step 3: Train the Model
+### Step 3: Update Config
+
+Edit `config.py` to list your flavors when adding new flavours:
+
+```python
+MONSTER_FLAVORS = [
+    "Monster Ultra Peachy Keen",
+    "Monster Bad Apple",
+    "Monster Full Throttle"
+	#Add new flavours here like "flavour name"
+]
+```
+
+### Step 4: Train the Model
 
 ```powershell
-python train_classifier.py --epochs 20 --batch-size 32
+python train_classifier.py --epochs 20 --batch-size 8
 ```
 
 This will:
@@ -170,19 +182,11 @@ This will:
 
 - `--data-dir` - Path to training data directory
 - `--epochs` - Number of training epochs (default: 20)
-- `--batch-size` - Batch size for training (default: 32)
+- `--batch-size` - Batch size for training (default: 8 for small datasets)
 
 ## Configuration
 
 Edit `config.py` to customize the application:
-
-### Model Paths
-
-```python
-POSE_MODEL_PATH = 'models/pose_landmark_lite.tflite'
-OBJECT_DETECTION_MODEL_PATH = 'models/detect.tflite'
-FLAVOR_CLASSIFIER_PATH = 'models/monster_flavor_classifier.tflite'
-```
 
 ### Webcam Settings
 
@@ -205,36 +209,22 @@ Add or remove flavors in the `MONSTER_FLAVORS` list:
 
 ```python
 MONSTER_FLAVORS = [
-    "Monster Energy Original",
-    "Monster Ultra White",
-    "Monster Ultra Blue",
-    # Add your own...
+    "Monster Ultra Peachy Keen",
+    "Monster Bad Apple",
+    "Monster Full Throttle",
+    # Add your own flavours if you wanna increase the data currently you have...
 ]
 ```
+
 
 ### Optional Features
 
 ```python
-ENABLE_TTS = False  # Text-to-speech
+ENABLE_TTS = False  # Text-to-speech(set to false cause it was annoying to run when testing)
 ENABLE_LOGGING = True  # Log detections to CSV
 SHOW_POSE_SKELETON = True
 SHOW_BOUNDING_BOXES = True
 SHOW_CONFIDENCE_BAR = True
-```
-
-## 🎨 Customization
-
-### Adding Custom Emojis
-
-Edit the `FLAVOR_EMOJIS` dictionary in `config.py`:
-
-```python
-FLAVOR_EMOJIS = {
-    "Monster Energy Original": "⚡",
-    "Monster Ultra White": "❄️",
-    "Monster Ultra Blue": "💙",
-    "Your Custom Flavor": "🔥",
-}
 ```
 
 ### Changing Colors
@@ -247,7 +237,7 @@ COLOR_BBOX_CAN = (0, 255, 255)  # Yellow
 COLOR_TEXT = (255, 255, 255)  # White
 ```
 
-## 🔧 Advanced Usage
+## Advanced Features to Explore☮️
 
 ### Using Alternative Training Methods
 
@@ -278,14 +268,14 @@ For better can detection, train a custom object detection model:
 4. Convert to TFLite
 5. Place in `models/detect.tflite`
 
-## 📊 Detection Logging
+## Detection Logging
 
 When `ENABLE_LOGGING = True`, detections are logged to `logs/detections.csv`:
 
 ```csv
 timestamp,flavor,confidence,hand_used
-2025-11-13T10:30:45,Monster Ultra Blue,0.9234,right_wrist
-2025-11-13T10:30:46,Monster Ultra Blue,0.9456,right_wrist
+2025-11-14T10:30:45,Monster Ultra Peachy Keen,0.9234,right_wrist
+2025-11-14T10:30:46,Monster Bad Apple,0.9456,left_wrist
 ```
 
 Analyze your logs to see:
@@ -294,7 +284,7 @@ Analyze your logs to see:
 - Detection accuracy over time
 - Usage patterns
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Webcam not detected
 
@@ -302,38 +292,36 @@ Analyze your logs to see:
 - Ensure no other application is using the webcam
 - Check webcam permissions
 
+### OpenCV window not appearing
+
+- Make sure you installed `opencv-python` not `opencv-python-headless`
+- Uninstall headless version: `pip uninstall opencv-python-headless`
+- Install GUI version: `pip install opencv-python==4.8.0.74`
+
 ### Low FPS
 
 - Reduce frame resolution in config
-- Use a lighter model
 - Close other applications
-- Ensure you have a compatible GPU (optional but helps, cause more GPU=more 💪)
+- GPU recommended for better performance (Cause... more GPU=more 💪)
 
 ### Poor detection accuracy
 
-- Collect more training data (100+ images per flavor)
+- Collect more training data (10+ images per flavor minimum)
 - Ensure good lighting when collecting data
 - Vary training data diversity
 - Train for more epochs
 - Adjust confidence thresholds
 
-### Models not loading
-
-- Run `python setup_models.py`
-- Check model file paths in `config.py`
-- Ensure TensorFlow is properly installed
-
-## 🎯 Performance Tips
+## Performance Tips
 
 1. **Better Training Data** = Better Results
 
-   - More images per flavor (100+ recommended)
+   - More images per flavor (20+ recommended, 100+ ideal)
    - Diverse angles and lighting
    - Clear, focused images
 2. **Optimize for Speed**
 
    - Reduce input resolution
-   - Use quantized models
    - Lower FPS target
 3. **Improve Accuracy**
 
@@ -341,22 +329,13 @@ Analyze your logs to see:
    - Adjust proximity threshold
    - Use better lighting
 
-## 📝 TODO / Future Enhancements
-
-- [ ] Multi-can detection (track multiple cans)
-- [ ] Drinking detection (detect when taking a sip)
-- [ ] Historical tracking dashboard
-- [ ] Mobile app version
-- [ ] Cloud-based model training
-- [ ] Social media integration
-- [ ] Calorie/caffeine tracking
-- [ ] AR overlays with effects
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **TensorFlow** - Machine learning framework
-- **MediaPipe** - Pose estimation
+- **MediaPipe** - Pose estimation (Optional in initial stage, but will be developed in the future)
 - **OpenCV** - Computer vision
-- **Monster Energy** - For making awesome drinks worth detecting! 🥤
+- **Monster Energy** - For making awesome drinks worth detecting
 
-**Made with alot of monsters, by a monster addict⚡**
+---
+
+**Made with lots of monsters, by a monster addict**

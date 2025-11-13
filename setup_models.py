@@ -21,10 +21,10 @@ def download_file(url: str, destination: str):
     
     try:
         urllib.request.urlretrieve(url, destination, show_progress)
-        print("\n✓ Download complete")
+        print("\n Download complete")
         return True
     except Exception as e:
-        print(f"\n✗ Download failed: {e}")
+        print(f"\n Download failed: {e}")
         return False
 
 
@@ -57,7 +57,7 @@ def download_sample_object_detection_model():
 def setup_models():
     """Set up all required models"""
     print("=" * 60)
-    print("🔧 Monster Analyzer Model Setup")
+    print("Monster Analyzer Model Setup")
     print("=" * 60)
     
     os.makedirs(config.MODEL_DIR, exist_ok=True)
@@ -71,20 +71,20 @@ def setup_models():
     if not os.path.exists(config.OBJECT_DETECTION_MODEL_PATH):
         download_sample_object_detection_model()
     else:
-        print(f"✓ Model already exists: {config.OBJECT_DETECTION_MODEL_PATH}")
+        print(f"Model already exists: {config.OBJECT_DETECTION_MODEL_PATH}")
     
     # Check flavor classifier
     print("\n3. Flavor Classifier Model:")
     if not os.path.exists(config.FLAVOR_CLASSIFIER_PATH):
-        print(f"✗ Model not found: {config.FLAVOR_CLASSIFIER_PATH}")
+        print(f"Model not found: {config.FLAVOR_CLASSIFIER_PATH}")
         print("\nTo create the flavor classifier:")
         print("  1. Collect training images using: python collect_training_data.py")
         print("  2. Train the model using: python train_classifier.py")
     else:
-        print(f"✓ Model exists: {config.FLAVOR_CLASSIFIER_PATH}")
+        print(f"Model exists: {config.FLAVOR_CLASSIFIER_PATH}")
     
     print("\n" + "=" * 60)
-    print("✓ Model setup complete")
+    print("Model setup complete")
     print("=" * 60)
 
 

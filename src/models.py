@@ -89,9 +89,9 @@ class ObjectDetector:
             self.interpreter.allocate_tensors()
             self.input_details = self.interpreter.get_input_details()
             self.output_details = self.interpreter.get_output_details()
-            print(f"✓ Object detection model loaded: {self.model_path}")
+            print(f"Object detection model loaded: {self.model_path}")
         except Exception as e:
-            print(f"✗ Failed to load object detection model: {e}")
+            print(f"Failed to load object detection model: {e}")
             print("  Note: You'll need to provide a TFLite object detection model")
     
     def detect(self, image: np.ndarray, confidence_threshold: float = 0.5) -> List[Dict]:
@@ -173,9 +173,9 @@ class FlavorClassifier:
             self.interpreter.allocate_tensors()
             self.input_details = self.interpreter.get_input_details()
             self.output_details = self.interpreter.get_output_details()
-            print(f"✓ Flavor classifier loaded: {self.model_path}")
+            print(f"Flavor classifier loaded: {self.model_path}")
         except Exception as e:
-            print(f"✗ Failed to load flavor classifier: {e}")
+            print(f"Failed to load flavor classifier: {e}")
             print("  Note: You'll need to train and provide the Monster flavor classifier")
     
     def classify(self, image: np.ndarray) -> Tuple[str, float]:
