@@ -1,0 +1,13 @@
+# Core dependencies
+tensorflow>=2.13.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+mediapipe>=0.10.0
+
+# Optional for enhanced features
+pyttsx3>=2.90  # Text-to-speech
+pillow>=10.0.0  # Image processing
+matplotlib>=3.7.0  # For visualization during training
+
+# Utilities
+requests>=2.31.0  # For downloading models
