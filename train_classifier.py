@@ -300,7 +300,7 @@ def create_sample_dataset_structure():
         f.write("You can also use:\n")
         f.write("- Google Images (with proper licensing)\n")
         f.write("- Your own webcam to capture training images\n")
-            f.write("- Use Data augmentation will be applied automatically during training\n")
+        f.write("- Data augmentation will be applied automatically during training\n")
     
     print(f"Sample dataset structure created: {training_dir}")
     print(f"  README: {readme_path}")
