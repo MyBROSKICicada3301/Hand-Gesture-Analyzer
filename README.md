@@ -1,4 +1,6 @@
-# Monster Analyzer - AI-Powered Flavor Detection
+# Monster Can Analyzer 
+
+_***This project will be more refined and is still in the initial stage of development***_
 
 **Real-time Monster Energy can flavor detection using TensorFlow Lite, pose estimation, and computer vision**
 
