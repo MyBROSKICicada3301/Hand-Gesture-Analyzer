@@ -137,6 +137,24 @@ class HandGestureAnalyzer:
         self.screenshot_count += 1
         print(f"Screenshot saved: {filename}")
     
+    def _is_middle_finger_only(self, fingers_up: list) -> bool:
+        """
+        Check if only the middle finger is up
+        
+        Args:
+            fingers_up: List of boolean values [thumb, index, middle, ring, pinky]
+            
+        Returns:
+            True if only middle finger is extended
+        """
+        # Middle finger is at index 2
+        # Check if middle is up and all others are down
+        return (not fingers_up[0] and  # thumb down
+                not fingers_up[1] and  # index down
+                fingers_up[2] and      # middle up
+                not fingers_up[3] and  # ring down
+                not fingers_up[4])     # pinky down
+    
     def process_frame(self, frame: np.ndarray) -> np.ndarray:
         """
         Process a single frame
@@ -172,6 +190,70 @@ class HandGestureAnalyzer:
         
         # Draw hand summary at top
         draw_hand_summary(frame, hands_info)
+        
+        # Check for middle finger gesture and display warning
+        middle_finger_detected = False
+        for hand_info in hands_info:
+            if self._is_middle_finger_only(hand_info['fingers_up']):
+                middle_finger_detected = True
+                break
+        
+        if middle_finger_detected:
+            # Draw warning message in large red text
+            warning_text = "No No Nooo... Bad move soldier"
+            
+            # Get text size for centering
+            font = cv2.FONT_HERSHEY_DUPLEX
+            font_scale = 1.2
+            thickness = 3
+            (text_width, text_height), baseline = cv2.getTextSize(
+                warning_text, font, font_scale, thickness
+            )
+            
+            # Calculate center position
+            x = (config.FRAME_WIDTH - text_width) // 2
+            y = config.FRAME_HEIGHT // 2
+            
+            # Draw background rectangle
+            padding = 20
+            cv2.rectangle(
+                frame,
+                (x - padding, y - text_height - padding),
+                (x + text_width + padding, y + padding),
+                (0, 0, 0),
+                -1
+            )
+            
+            # Draw red border
+            cv2.rectangle(
+                frame,
+                (x - padding, y - text_height - padding),
+                (x + text_width + padding, y + padding),
+                (0, 0, 255),
+                4
+            )
+            
+            # Draw shadow
+            cv2.putText(
+                frame,
+                warning_text,
+                (x + 3, y + 3),
+                font,
+                font_scale,
+                (0, 0, 0),
+                thickness + 2
+            )
+            
+            # Draw main text in red
+            cv2.putText(
+                frame,
+                warning_text,
+                (x, y),
+                font,
+                font_scale,
+                (0, 0, 255),
+                thickness
+            )
         
         # Process each detected hand
         for hand_info in hands_info:
