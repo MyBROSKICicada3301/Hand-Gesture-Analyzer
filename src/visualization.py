@@ -1,5 +1,5 @@
 """
-Visualization utilities for Monster Analyzer
+Visualization utilities for Hand Gesture Analyzer
 Handles drawing overlays on frames
 """
 import cv2
@@ -8,40 +8,113 @@ from typing import Tuple, List, Dict, Optional
 import mediapipe as mp
 
 
-def draw_pose_skeleton(image: np.ndarray, pose_results, color: Tuple[int, int, int] = (0, 255, 0)):
+def draw_hand_landmarks(image: np.ndarray, hand_landmarks, hand_label: str, 
+                       color: Tuple[int, int, int] = (0, 255, 0)):
     """
-    Draw pose skeleton on image
+    Draw hand landmarks and connections on image
     
     Args:
         image: Image to draw on (BGR format)
-        pose_results: MediaPipe pose results
-        color: Color for skeleton (BGR)
+        hand_landmarks: MediaPipe hand landmarks
+        hand_label: "Left" or "Right"
+        color: Color for landmarks (BGR)
     """
-    if pose_results.pose_landmarks:
-        mp_drawing = mp.solutions.drawing_utils
-        mp_pose = mp.solutions.pose
+    mp_drawing = mp.solutions.drawing_utils
+    mp_drawing_styles = mp.solutions.drawing_styles
+    mp_hands = mp.solutions.hands
+    
+    mp_drawing.draw_landmarks(
+        image,
+        hand_landmarks,
+        mp_hands.HAND_CONNECTIONS,
+        mp_drawing_styles.get_default_hand_landmarks_style(),
+        mp_drawing_styles.get_default_hand_connections_style()
+    )
+
+
+def draw_finger_count(image: np.ndarray, finger_count: int, hand_label: str,
+                     position: Tuple[int, int], 
+                     color: Tuple[int, int, int] = (255, 255, 255),
+                     font_scale: float = 1.5):
+    """
+    Draw finger count display
+    
+    Args:
+        image: Image to draw on (BGR format)
+        finger_count: Number of fingers extended (0-5)
+        hand_label: "Left" or "Right"
+        position: (x, y) position for text
+        color: Text color (BGR)
+        font_scale: Font size scale
+    """
+    text = f"{hand_label} Hand: {finger_count} finger{'s' if finger_count != 1 else ''}"
+    
+    # Draw text shadow for better visibility
+    cv2.putText(
+        image,
+        text,
+        (position[0] + 3, position[1] + 3),
+        cv2.FONT_HERSHEY_DUPLEX,
+        font_scale,
+        (0, 0, 0),
+        4
+    )
+    
+    # Draw main text
+    cv2.putText(
+        image,
+        text,
+        position,
+        cv2.FONT_HERSHEY_DUPLEX,
+        font_scale,
+        color,
+        2
+    )
+
+
+def draw_finger_status(image: np.ndarray, fingers_up: List[bool], 
+                      finger_names: List[str],
+                      position: Tuple[int, int] = (20, 120),
+                      font_scale: float = 0.6):
+    """
+    Draw individual finger status (up/down)
+    
+    Args:
+        image: Image to draw on (BGR format)
+        fingers_up: List of boolean values for each finger
+        finger_names: List of finger names
+        position: (x, y) position for text
+        font_scale: Font size scale
+    """
+    y_offset = 0
+    for i, (name, is_up) in enumerate(zip(finger_names, fingers_up)):
+        status = "UP" if is_up else "DOWN"
+        color = (0, 255, 0) if is_up else (100, 100, 100)
+        text = f"{name}: {status}"
         
-        mp_drawing.draw_landmarks(
+        cv2.putText(
             image,
-            pose_results.pose_landmarks,
-            mp_pose.POSE_CONNECTIONS,
-            mp_drawing.DrawingSpec(color=color, thickness=2, circle_radius=2),
-            mp_drawing.DrawingSpec(color=color, thickness=2, circle_radius=2)
+            text,
+            (position[0], position[1] + y_offset),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            font_scale,
+            color,
+            2
         )
+        y_offset += 25
 
 
 def draw_bounding_box(image: np.ndarray, bbox: Tuple[int, int, int, int], 
-                      label: str = "", score: float = 0.0, 
+                      label: str = "", 
                       color: Tuple[int, int, int] = (0, 255, 255),
                       thickness: int = 2):
     """
-    Draw bounding box with label
+    Draw bounding box around hand
     
     Args:
         image: Image to draw on (BGR format)
         bbox: (xmin, ymin, xmax, ymax)
         label: Text label
-        score: Confidence score
         color: Box color (BGR)
         thickness: Line thickness
     """
@@ -50,11 +123,10 @@ def draw_bounding_box(image: np.ndarray, bbox: Tuple[int, int, int, int],
     # Draw rectangle
     cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, thickness)
     
-    # Draw label background
+    # Draw label if provided
     if label:
-        label_text = f"{label}: {score:.2%}" if score > 0 else label
         (text_width, text_height), baseline = cv2.getTextSize(
-            label_text, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1
+            label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2
         )
         cv2.rectangle(
             image,
@@ -65,103 +137,16 @@ def draw_bounding_box(image: np.ndarray, bbox: Tuple[int, int, int, int],
         )
         cv2.putText(
             image,
-            label_text,
+            label,
             (xmin + 5, ymin - 5),
             cv2.FONT_HERSHEY_SIMPLEX,
-            0.5,
+            0.7,
             (0, 0, 0),
-            1
+            2
         )
 
 
-def draw_flavor_prediction(image: np.ndarray, flavor: str, confidence: float,
-                          emoji: str = "", position: Tuple[int, int] = (20, 50),
-                          font_scale: float = 1.0, color: Tuple[int, int, int] = (255, 255, 255)):
-    """
-    Draw flavor prediction text with emoji
-    
-    Args:
-        image: Image to draw on (BGR format)
-        flavor: Flavor name
-        confidence: Confidence score (0-1)
-        emoji: Emoji character
-        position: (x, y) position for text
-        font_scale: Font size scale
-        color: Text color (BGR)
-    """
-    text = f"Guess: {flavor} ({confidence:.0%}) {emoji}"
-    
-    # Draw text shadow for better visibility
-    cv2.putText(
-        image,
-        text,
-        (position[0] + 2, position[1] + 2),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        font_scale,
-        (0, 0, 0),
-        3
-    )
-    
-    # Draw main text
-    cv2.putText(
-        image,
-        text,
-        position,
-        cv2.FONT_HERSHEY_SIMPLEX,
-        font_scale,
-        color,
-        2
-    )
-
-
-def draw_confidence_bar(image: np.ndarray, confidence: float, 
-                       position: Tuple[int, int] = (20, 100),
-                       bar_width: int = 300, bar_height: int = 20,
-                       bg_color: Tuple[int, int, int] = (50, 50, 50),
-                       fg_color: Tuple[int, int, int] = (0, 255, 0)):
-    """
-    Draw confidence bar
-    
-    Args:
-        image: Image to draw on (BGR format)
-        confidence: Confidence score (0-1)
-        position: (x, y) position for bar
-        bar_width: Width of bar in pixels
-        bar_height: Height of bar in pixels
-        bg_color: Background color (BGR)
-        fg_color: Foreground color (BGR)
-    """
-    x, y = position
-    
-    # Draw background
-    cv2.rectangle(image, (x, y), (x + bar_width, y + bar_height), bg_color, -1)
-    
-    # Draw filled portion
-    fill_width = int(bar_width * confidence)
-    cv2.rectangle(image, (x, y), (x + fill_width, y + bar_height), fg_color, -1)
-    
-    # Draw border
-    cv2.rectangle(image, (x, y), (x + bar_width, y + bar_height), (255, 255, 255), 2)
-
-
-def draw_wrist_indicator(image: np.ndarray, wrist_pos: Tuple[int, int], 
-                         color: Tuple[int, int, int] = (255, 0, 255),
-                         radius: int = 8):
-    """
-    Draw circle at wrist position
-    
-    Args:
-        image: Image to draw on (BGR format)
-        wrist_pos: (x, y) position
-        color: Circle color (BGR)
-        radius: Circle radius
-    """
-    if wrist_pos is not None:
-        cv2.circle(image, wrist_pos, radius, color, -1)
-        cv2.circle(image, wrist_pos, radius + 2, (255, 255, 255), 2)
-
-
-def draw_fps(image: np.ndarray, fps: float, position: Tuple[int, int] = (20, 30)):
+def draw_fps(image: np.ndarray, fps: float, position: Tuple[int, int] = (10, 30)):
     """
     Draw FPS counter
     
@@ -176,17 +161,17 @@ def draw_fps(image: np.ndarray, fps: float, position: Tuple[int, int] = (20, 30)
         text,
         position,
         cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
+        0.7,
         (0, 255, 0),
         2
     )
 
 
 def draw_status_message(image: np.ndarray, message: str, 
-                       position: Tuple[int, int] = (20, 150),
+                       position: Tuple[int, int] = (20, 450),
                        color: Tuple[int, int, int] = (255, 255, 0)):
     """
-    Draw status message
+    Draw status message at bottom
     
     Args:
         image: Image to draw on (BGR format)
@@ -199,39 +184,64 @@ def draw_status_message(image: np.ndarray, message: str,
         message,
         position,
         cv2.FONT_HERSHEY_SIMPLEX,
-        0.7,
+        0.6,
         color,
         2
     )
 
 
-def create_split_view(frame1: np.ndarray, frame2: np.ndarray, 
-                     labels: Tuple[str, str] = ("Original", "Detection")) -> np.ndarray:
+def draw_hand_summary(image: np.ndarray, hands_info: List[Dict], 
+                     position: Tuple[int, int] = (10, 60)):
     """
-    Create side-by-side split view of two frames
+    Draw summary of all detected hands
     
     Args:
-        frame1: First frame
-        frame2: Second frame
-        labels: Labels for each frame
-        
-    Returns:
-        Combined frame
+        image: Image to draw on (BGR format)
+        hands_info: List of hand info dictionaries
+        position: (x, y) starting position
     """
-    # Ensure frames are same size
-    h1, w1 = frame1.shape[:2]
-    h2, w2 = frame2.shape[:2]
-    
-    if h1 != h2 or w1 != w2:
-        frame2 = cv2.resize(frame2, (w1, h1))
-    
-    # Stack horizontally
-    combined = np.hstack([frame1, frame2])
-    
-    # Add labels
-    cv2.putText(combined, labels[0], (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 
-                0.8, (255, 255, 255), 2)
-    cv2.putText(combined, labels[1], (w1 + 10, 30), cv2.FONT_HERSHEY_SIMPLEX, 
-                0.8, (255, 255, 255), 2)
-    
-    return combined
+    if not hands_info:
+        text = "No hands detected"
+        cv2.putText(
+            image,
+            text,
+            position,
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.8,
+            (100, 100, 100),
+            2
+        )
+    else:
+        y_offset = 0
+        for i, hand_info in enumerate(hands_info):
+            label = hand_info['label']
+            finger_count = hand_info['finger_count']
+            
+            # Choose color based on hand
+            color = (0, 255, 0) if label == "Left" else (255, 0, 0)
+            
+            text = f"{label}: {finger_count} finger{'s' if finger_count != 1 else ''}"
+            
+            # Shadow
+            cv2.putText(
+                image,
+                text,
+                (position[0] + 2, position[1] + y_offset + 2),
+                cv2.FONT_HERSHEY_DUPLEX,
+                0.9,
+                (0, 0, 0),
+                3
+            )
+            
+            # Main text
+            cv2.putText(
+                image,
+                text,
+                (position[0], position[1] + y_offset),
+                cv2.FONT_HERSHEY_DUPLEX,
+                0.9,
+                color,
+                2
+            )
+            
+            y_offset += 35
