@@ -81,7 +81,7 @@ cd Hand-Gesture-Analyzer
 2. Create a virtual environment (recommended)
 
 ```bash
-python -m venv venv
+.\venv\Scripts\Activate.ps1
 
 # Windows
 venv\\Scripts\\activate

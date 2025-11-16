@@ -153,7 +153,7 @@ class HandGestureAnalyzer:
                 break
         
         if middle_finger_detected:
-            warning_text = "No No Nooo... Bad move soldier"
+            warning_text = "No No Nooo... Bad move soldier...LOWER THAT FINGER NOW!"
             
             font = cv2.FONT_HERSHEY_DUPLEX
             font_scale = 1.2
