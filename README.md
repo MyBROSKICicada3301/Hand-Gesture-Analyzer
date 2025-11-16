@@ -1,6 +1,6 @@
 # Hand Gesture Analyzer
 
-**Real-time hand detection and finger counting using MediaPipe and OpenCV**
+Real-time hand detection and finger counting using MediaPipe and OpenCV
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![OpenCV](https://img.shields.io/badge/OpenCV-4.8%2B-green)
@@ -10,26 +10,26 @@
 
 Hand Gesture Analyzer is an interactive AI application that uses your laptop webcam to:
 
-- **Detect hands** in real-time (left and right)
-- **Count fingers** extended on each hand (0-5)
-- **Display live visual overlays** with hand landmarks and finger counts
-- **Log detections** for analysis and tracking
+- Detect hands in real-time (left and right)
+- Count fingers extended on each hand (0-5)
+- Display live visual overlays with hand landmarks and finger counts
+- Log detections for analysis and tracking
 
 ### Core Features
 
-**Real-time Hand Detection**
+Real-time Hand Detection
 
 - Powered by MediaPipe Hands for accurate hand landmark detection
 - Supports simultaneous detection of both left and right hands
 - High-performance tracking with minimal latency
 
-**Finger Counting**
+Finger Counting
 
 - Accurately counts extended fingers (0-5) on each hand
 - Distinguishes between left and right hands
 - Individual finger status tracking (thumb, index, middle, ring, pinky)
 
-**Visual Overlays**
+Visual Overlays
 
 - Hand skeleton visualization with landmarks and connections
 - Color-coded hands (Green for left, Blue for right)
@@ -37,7 +37,7 @@ Hand Gesture Analyzer is an interactive AI application that uses your laptop web
 - FPS monitoring
 - Detection statistics
 
-**Optional Features**
+Optional Features
 
 - Text-to-speech announcements
 - Detection logging to CSV
@@ -71,13 +71,13 @@ Hand-Gesture-Analyzer/
 
 ### Setup
 
-1. **Clone or download this repository**
+1. Clone or download this repository
 
 ```bash
 cd Hand-Gesture-Analyzer
 ```
 
-2. **Create a virtual environment (recommended)**
+2. Create a virtual environment (recommended)
 
 ```bash
 python -m venv venv
@@ -89,7 +89,7 @@ venv\\Scripts\\activate
 source venv/bin/activate
 ```
 
-3. **Install dependencies**
+3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -107,28 +107,28 @@ python hand_gesture_analyzer.py
 
 ### Controls
 
-- **'q'** - Quit the application
-- **'s'** - Save screenshot of current frame
-- **'r'** - Reset detection statistics
+- 'q' - Quit the application
+- 's' - Save screenshot of current frame
+- 'r' - Reset detection statistics
 
 ### What You'll See
 
 The application displays:
 
-- **Live camera feed** with your hands detected
-- **Hand landmarks** (21 points per hand) connected with lines
-- **Finger count** for each detected hand at the top
-- **Hand label** (Left/Right) color-coded
-- **FPS counter** at top-left
-- **Detection statistics** at bottom
+- Live camera feed with your hands detected
+- Hand landmarks (21 points per hand) connected with lines
+- Finger count for each detected hand at the top
+- Hand label (Left/Right) color-coded
+- FPS counter at top-left
+- Detection statistics at bottom
 
 ### How It Works
 
-1. **Hand Detection**: MediaPipe Hands detects up to 2 hands in the frame
-2. **Landmark Tracking**: 21 landmarks per hand are tracked in 3D space
-3. **Finger Counting**: Algorithm determines which fingers are extended based on landmark positions
-4. **Handedness**: Left vs Right hand is automatically determined
-5. **Visualization**: Results are overlaid on the live video feed
+1. Hand Detection: MediaPipe Hands detects up to 2 hands in the frame
+2. Landmark Tracking: 21 landmarks per hand are tracked in 3D space
+3. Finger Counting: Algorithm determines which fingers are extended based on landmark positions
+4. Handedness: Left vs Right hand is automatically determined
+5. Visualization: Results are overlaid on the live video feed
 
 ## Configuration
 
@@ -155,8 +155,8 @@ ENABLE_SCREENSHOTS = True  # Allow screenshots
 
 The algorithm uses hand landmark positions to determine finger states:
 
-- **Thumb**: Checks if thumb tip is to the left/right of thumb IP joint (handedness-dependent)
-- **Other Fingers**: Checks if fingertip is above the PIP joint (second joint from tip)
+- Thumb: Checks if thumb tip is to the left/right of thumb IP joint (handedness-dependent)
+- Other Fingers: Checks if fingertip is above the PIP joint (second joint from tip)
 
 Each finger is independently classified as UP or DOWN, and the total count (0-5) is calculated.
 
@@ -172,12 +172,12 @@ timestamp,hand_label,finger_count,thumb,index,middle,ring,pinky
 
 ## Use Cases
 
-- **Sign language recognition** foundation
-- **Gesture-based control** interfaces
-- **Hand therapy** and rehabilitation tracking
-- **Educational** demonstrations
-- **Gaming** input systems
-- **Accessibility** tools
+- Sign language recognition foundation
+- Gesture-based control interfaces
+- Hand therapy and rehabilitation tracking
+- Educational demonstrations
+- Gaming input systems
+- Accessibility tools
 
 ## Technical Details
 
@@ -194,29 +194,29 @@ MediaPipe Hands provides 21 landmarks per hand:
 
 ### Performance
 
-- **FPS**: 25-30 on average laptop webcam
-- **Latency**: <50ms processing time per frame
-- **Accuracy**: >95% finger counting accuracy in good lighting
+- FPS: 25-30 on average laptop webcam
+- Latency: <50ms processing time per frame
+- Accuracy: >95% finger counting accuracy in good lighting
 
 ## Troubleshooting
 
-**Camera not detected**
+Camera not detected
 
 - Check `config.py` and set correct `CAMERA_INDEX` (usually 0)
 - Ensure no other app is using the webcam
 
-**Low FPS**
+Low FPS
 
 - Reduce `FRAME_WIDTH` and `FRAME_HEIGHT` in `config.py`
 - Set `MAX_NUM_HANDS = 1` if only detecting one hand
 
-**Inaccurate finger counting**
+Inaccurate finger counting
 
 - Ensure good lighting conditions
 - Keep hand flat and fingers clearly separated
 - Adjust `HAND_DETECTION_CONFIDENCE` threshold
 
-**Import errors**
+Import errors
 
 - Ensure all dependencies are installed: `pip install -r requirements.txt`
 - Activate your virtual environment if using one
@@ -237,21 +237,17 @@ See LICENSE file for details.
 
 ## Acknowledgments
 
-- **MediaPipe** by Google for hand detection and landmark tracking
-- **OpenCV** for computer vision utilities
+- MediaPipe by Google for hand detection and landmark tracking
+- OpenCV for computer vision utilities
 
 ## Future Enhancements
 
-- [ ] Gesture recognition (peace sign, thumbs up, etc.)
-- [ ] Hand pose classification
-- [ ] Multi-hand gesture combinations
-- [ ] Custom gesture training
-- [ ] Mobile app version
+- Gesture recognition (peace sign, thumbs up, etc.)
+- Hand pose classification
+- Multi-hand gesture combinations
+- Custom gesture training
+- Mobile app version
 
 ## Contributing
 
 Contributions welcome! Feel free to submit issues and pull requests.
-
----
-
-**Happy Hand Tracking! 👋**

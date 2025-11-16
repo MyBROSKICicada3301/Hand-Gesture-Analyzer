@@ -1,7 +1,3 @@
-"""
-Visualization utilities for Hand Gesture Analyzer
-Handles drawing overlays on frames
-"""
 import cv2
 import numpy as np
 from typing import Tuple, List, Dict, Optional
@@ -10,15 +6,6 @@ import mediapipe as mp
 
 def draw_hand_landmarks(image: np.ndarray, hand_landmarks, hand_label: str, 
                        color: Tuple[int, int, int] = (0, 255, 0)):
-    """
-    Draw hand landmarks and connections on image
-    
-    Args:
-        image: Image to draw on (BGR format)
-        hand_landmarks: MediaPipe hand landmarks
-        hand_label: "Left" or "Right"
-        color: Color for landmarks (BGR)
-    """
     mp_drawing = mp.solutions.drawing_utils
     mp_drawing_styles = mp.solutions.drawing_styles
     mp_hands = mp.solutions.hands
@@ -36,20 +23,8 @@ def draw_finger_count(image: np.ndarray, finger_count: int, hand_label: str,
                      position: Tuple[int, int], 
                      color: Tuple[int, int, int] = (255, 255, 255),
                      font_scale: float = 1.5):
-    """
-    Draw finger count display
-    
-    Args:
-        image: Image to draw on (BGR format)
-        finger_count: Number of fingers extended (0-5)
-        hand_label: "Left" or "Right"
-        position: (x, y) position for text
-        color: Text color (BGR)
-        font_scale: Font size scale
-    """
     text = f"{hand_label} Hand: {finger_count} finger{'s' if finger_count != 1 else ''}"
     
-    # Draw text shadow for better visibility
     cv2.putText(
         image,
         text,
@@ -60,7 +35,6 @@ def draw_finger_count(image: np.ndarray, finger_count: int, hand_label: str,
         4
     )
     
-    # Draw main text
     cv2.putText(
         image,
         text,
@@ -76,16 +50,6 @@ def draw_finger_status(image: np.ndarray, fingers_up: List[bool],
                       finger_names: List[str],
                       position: Tuple[int, int] = (20, 120),
                       font_scale: float = 0.6):
-    """
-    Draw individual finger status (up/down)
-    
-    Args:
-        image: Image to draw on (BGR format)
-        fingers_up: List of boolean values for each finger
-        finger_names: List of finger names
-        position: (x, y) position for text
-        font_scale: Font size scale
-    """
     y_offset = 0
     for i, (name, is_up) in enumerate(zip(finger_names, fingers_up)):
         status = "UP" if is_up else "DOWN"
@@ -108,22 +72,10 @@ def draw_bounding_box(image: np.ndarray, bbox: Tuple[int, int, int, int],
                       label: str = "", 
                       color: Tuple[int, int, int] = (0, 255, 255),
                       thickness: int = 2):
-    """
-    Draw bounding box around hand
-    
-    Args:
-        image: Image to draw on (BGR format)
-        bbox: (xmin, ymin, xmax, ymax)
-        label: Text label
-        color: Box color (BGR)
-        thickness: Line thickness
-    """
     xmin, ymin, xmax, ymax = bbox
     
-    # Draw rectangle
     cv2.rectangle(image, (xmin, ymin), (xmax, ymax), color, thickness)
     
-    # Draw label if provided
     if label:
         (text_width, text_height), baseline = cv2.getTextSize(
             label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2
@@ -147,14 +99,6 @@ def draw_bounding_box(image: np.ndarray, bbox: Tuple[int, int, int, int],
 
 
 def draw_fps(image: np.ndarray, fps: float, position: Tuple[int, int] = (10, 30)):
-    """
-    Draw FPS counter
-    
-    Args:
-        image: Image to draw on (BGR format)
-        fps: Frames per second
-        position: (x, y) position
-    """
     text = f"FPS: {fps:.1f}"
     cv2.putText(
         image,
@@ -170,15 +114,6 @@ def draw_fps(image: np.ndarray, fps: float, position: Tuple[int, int] = (10, 30)
 def draw_status_message(image: np.ndarray, message: str, 
                        position: Tuple[int, int] = (20, 450),
                        color: Tuple[int, int, int] = (255, 255, 0)):
-    """
-    Draw status message at bottom
-    
-    Args:
-        image: Image to draw on (BGR format)
-        message: Status message text
-        position: (x, y) position
-        color: Text color (BGR)
-    """
     cv2.putText(
         image,
         message,
@@ -192,14 +127,6 @@ def draw_status_message(image: np.ndarray, message: str,
 
 def draw_hand_summary(image: np.ndarray, hands_info: List[Dict], 
                      position: Tuple[int, int] = (10, 60)):
-    """
-    Draw summary of all detected hands
-    
-    Args:
-        image: Image to draw on (BGR format)
-        hands_info: List of hand info dictionaries
-        position: (x, y) starting position
-    """
     if not hands_info:
         text = "No hands detected"
         cv2.putText(
@@ -217,12 +144,10 @@ def draw_hand_summary(image: np.ndarray, hands_info: List[Dict],
             label = hand_info['label']
             finger_count = hand_info['finger_count']
             
-            # Choose color based on hand
             color = (0, 255, 0) if label == "Left" else (255, 0, 0)
             
             text = f"{label}: {finger_count} finger{'s' if finger_count != 1 else ''}"
             
-            # Shadow
             cv2.putText(
                 image,
                 text,
@@ -233,7 +158,6 @@ def draw_hand_summary(image: np.ndarray, hands_info: List[Dict],
                 3
             )
             
-            # Main text
             cv2.putText(
                 image,
                 text,
