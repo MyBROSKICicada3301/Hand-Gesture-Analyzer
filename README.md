@@ -28,6 +28,7 @@ Finger Counting
 - Accurately counts extended fingers (0-5) on each hand
 - Distinguishes between left and right hands
 - Individual finger status tracking (thumb, index, middle, ring, pinky)
+  - Also a fun feature -> Detects when you throw the finger and alerts
 
 Visual Overlays
 
@@ -176,7 +177,7 @@ timestamp,hand_label,finger_count,thumb,index,middle,ring,pinky
 - Gesture-based control interfaces
 - Hand therapy and rehabilitation tracking
 - Educational demonstrations
-- Gaming input systems
+- Input systems that can be used for gaming
 - Accessibility tools
 
 ## Technical Details
@@ -231,10 +232,6 @@ Import errors
 
 See `requirements.txt` for complete list.
 
-## License
-
-See LICENSE file for details.
-
 ## Acknowledgments
 
 - MediaPipe by Google for hand detection and landmark tracking
@@ -245,9 +242,3 @@ See LICENSE file for details.
 - Gesture recognition (peace sign, thumbs up, etc.)
 - Hand pose classification
 - Multi-hand gesture combinations
-- Custom gesture training
-- Mobile app version
-
-## Contributing
-
-Contributions welcome! Feel free to submit issues and pull requests.
