@@ -66,7 +66,8 @@ Hand-Gesture-Analyzer/
 
 ### Prerequisites
 
-- Python 3.8 or higher
+- Python 3.8 or higher (Recommended - 3.10)
+  - But there are times tensorflow may not be compatible with versions greater than Python 3.10
 - Webcam
 - Windows/macOS/Linux
 
