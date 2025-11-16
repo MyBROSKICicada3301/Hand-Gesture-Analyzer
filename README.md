@@ -194,12 +194,12 @@ MediaPipe Hands provides 21 landmarks per hand:
 - 13-16: Ring finger (MCP, PIP, DIP, TIP)
 - 17-20: Pinky (MCP, PIP, DIP, TIP)
 
-##### CMC, MCP, IP and TIP
+#### CMC, MCP, IP and TIP
 
-* **CMC (Carpometacarpal Joint)** – The joint at the base of the thumb where it connects to the wrist.
-* **MCP (Metacarpophalangeal Joint)** – The knuckle joints where each finger attaches to the hand.
-* **IP (Interphalangeal Joint)** – The middle joints in the fingers (for the thumb, there is only one IP joint).
-* **TIP (Fingertip Landmark)** – The landmark at the very end of each finger.
+* **CMC** (Carpometacarpal Joint) – The joint at the base of the thumb where it connects to the wrist.
+* **MCP** (Metacarpophalangeal Joint) – The knuckle joints where each finger attaches to the hand.
+* **IP** (Interphalangeal Joint) – The middle joints in the fingers (for the thumb, there is only one IP joint).
+* **TIP** (Fingertip Landmark) – The landmark at the very end of each finger.
 
 ### Performance
 
